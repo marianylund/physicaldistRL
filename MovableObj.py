@@ -1,6 +1,6 @@
 from graphics import *
 import math
-
+"""
 class MovableObjGraphic():
     def __init__(self, window):
         self.win = window
@@ -33,13 +33,14 @@ class MovableObjGraphic():
         self.body = Rectangle(Point(5.3,5.3), Point(5.8,5.8))
         self.body.draw(self.win)
         self.body.setFill("white")
-    
+ """   
 
 class MovableObj():
     up = [0, 1]
     down = [0, -1]
     right = [1, 0] 
     left = [-1, 0]
+
     def __init__(self, start_pos):
         self.directions = [[1, 3], [2, 0], [3, 1], [0, 2]]
         self.moves = [[[-1, -1], [1, -1]], [[1, -1], [1, 1]], [[1, 1], [-1, 1]], [[-1, 1],[-1, -1]]]
@@ -51,29 +52,22 @@ class MovableObj():
         return self.current_pos
     
     def get_vision_pos(self):
-        return self.current_pos + self.states[self.currentState]
+        return (self.current_pos[0] + self.states[self.currentState][0], self.current_pos[1] + self.states[self.currentState][1]) 
     
-    def do_action(action_num):
-        if action_num == 0:
-            
+    def do_action(self, action_num):
+        if action_num == 0: # look left
+            self.look_left()
+        elif action_num == 1: # look right
+            self.look_left(False)
+        else:
+            self.move_forward()
 
     def move_forward(self):
         direction = self.states[self.currentState]
+        self.current_pos = (self.current_pos[0] + direction[0], self.current_pos[1] + direction[1]) 
     
     def restart(self):
         self.currentState = 0
-    
-    # TODO FIX not ending when found
-    def get_body_vis_state(self, object_positions):
-        visionPos = self.get_vision_pos()
-        bodyPos = self.get_body_pos()
-        state_body_vis = [len(object_positions) + 1, len(object_positions) + 1]
-        for i in range(len(object_positions)):
-            if visionPos[0] == object_positions[i][0] and visionPos[1] == object_positions[i][1]:
-                state_body_vis[1] = i
-            elif bodyPos[0] == object_positions[i][0] and bodyPos[1] == object_positions[i][1]:
-                state_body_vis[0] = i
-        return state_body_vis
 
     def look_left(self, left = True):
         nextState = self.directions[self.currentState][0 if left else 1]
@@ -82,7 +76,6 @@ class MovableObj():
         #print("nextState: ", nextState)
 
         xPos = self.moves[self.currentState][0 if left else 1][0] #xDestination - visionPos[0]
-
         yPos = self.moves[self.currentState][0 if left else 1][1] #yDestination - visionPos[1]
         #print(xPos, yPos)
         #print("newPos", xPos, yPos)
