@@ -35,6 +35,7 @@ class MovableObjGraphic():
         self.body.setFill("white")
  """   
 
+"""
 class MovableObj():
     up = [0, 1]
     down = [0, -1]
@@ -87,7 +88,7 @@ class MovableObj():
 """
 # Working copy:
 
-class MovableObj():
+class GraphicMovableObj():
     up = [0, 1]
     down = [0, -1]
     right = [1, 0] 
@@ -155,5 +156,3 @@ class MovableObj():
         self.currentState = nextState
         #print(self.vision.getP1(), self.vision.getP1())
         #print("newState: ", self.currentState)
-
-"""

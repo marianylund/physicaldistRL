@@ -1,4 +1,4 @@
-from MovableObj import MovableObj
+from MovableObj import GraphicMovableObj
 import numpy as np
 from random import randint
 from graphics import *
@@ -7,7 +7,7 @@ import traceback
 import sys
 import enum 
 
-class Covid19Environment():
+class GraphicCovid19Environment():
     reward = 0
     visited_kiwi = False
 
@@ -68,7 +68,7 @@ class Covid19Environment():
     
     def add_survivor(self):
         print("add_survivor")
-        self.survivor = MovableObj(self.win)
+        self.survivor = GraphicMovableObj(self.win)
         print("add_survivor")
         
     def add_kiwi(self):
@@ -129,14 +129,6 @@ class Covid19Environment():
         elif enum_state[0].value == 2:
             print("Oh, no, another person")
             self.reward -= 10
-
-
-
-
-
-
-
-
 
 class States(enum.Enum): 
     KIWI = 0
