@@ -26,7 +26,7 @@ class Covid19Environment():
     total_actions = 0
     random_actions = 0
 
-    def __init__(self, q_table, epsilon, world_size = (5, 5), learning_rate = 0.7, discount_rate = 0.618):
+    def __init__(self, q_table, epsilon, random_others, world_size = (5, 5), learning_rate = 0.7, discount_rate = 0.618):
         self.learning_rate = learning_rate
         self.discount_rate = discount_rate
         self.epsilon = epsilon
@@ -34,6 +34,10 @@ class Covid19Environment():
         self.world_size = world_size
         self.environment_table = np.zeros(world_size, dtype = int)
         self.environment_table[0][0] = States.HOUSE.value
+        
+        for other_pos in random_others:
+            self.environment_table[other_pos[0]][other_pos[1]] = States.SOMEONE.value
+        
         self.environment_table[world_size[0]-1][world_size[1]-1] = States.KIWI.value
         self.q_table = q_table
         start_pos = [math.floor(world_size[0]/2), math.floor(world_size[1]/2)]
@@ -132,20 +136,22 @@ class GraphicCovid19Environment():
     have_been_to_kiwi = False
     done = False
 
-    def __init__(self, q_table_choice = False, q_table = None):
+    def __init__(self, random_others, q_table_choice = False, q_table = None):
         try:
             self.win = GraphWin('Floor', 500, 500)
             self.win.setCoords(0.0, 0.0, 10.0, 10.0)
             self.win.setBackground("blue4")
 
+            self.world_size = (10, 10)
+            self.environment_table = np.zeros(self.world_size, dtype = int)
+            self.environment_table[0][0] = States.HOUSE.value
+            
             self.draw_grid()
             self.add_house()
             self.add_kiwi()
             self.add_survivor()
+            self.add_someone(random_others)
             
-            self.world_size = (10, 10)
-            self.environment_table = np.zeros(self.world_size, dtype = int)
-            self.environment_table[0][0] = States.HOUSE.value
             self.environment_table[self.world_size[0]-1][self.world_size[1]-1] = States.KIWI.value
             
             self.q_table = q_table
@@ -158,6 +164,16 @@ class GraphicCovid19Environment():
             print(traceback.format_exc())
             if self.win != None:    
                 self.win.close()
+                
+    def add_someone(self, random_others):
+        
+        for other_pos in random_others:
+            self.environment_table[other_pos[0]][other_pos[1]] = States.SOMEONE.value
+            other1 = Rectangle(Point(other_pos[0] + 0.3,other_pos[1] + 0.3), Point(other_pos[0] + 0.8, other_pos[1] + 0.8))
+            other1.draw(self.win)
+            other1.setFill("orange")
+        
+        print("Others are added")
         
     def listen_for_keys(self):
         while not self.done:
