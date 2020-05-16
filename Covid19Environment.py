@@ -84,10 +84,10 @@ class Covid19Environment():
                 return 50, False
         elif state[0] == States.HOUSE.value:
             if self.have_been_to_kiwi:
-                print("Wooow! House reached after Kiwi!")
+                #print("Wooow! House reached after Kiwi!")
                 return 200, True
             else:
-                print("House reached")
+                #print("House reached")
                 return 30, True
             
             return 10, True
@@ -197,7 +197,6 @@ class GraphicCovid19Environment():
     def do_action_from_q_table(self):
         current_state = self.get_state(self.survivor.get_body_pos(), self.survivor.get_vision_pos())
         action_to_do = np.argmax(self.q_table[current_state[0],current_state[1],:])
-        print(self.q_table[current_state[0],current_state[1],:])
         self.do_action(action_to_do)
         
     def is_within_bounds(self, pos):
