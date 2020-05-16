@@ -105,9 +105,13 @@ class Covid19Environment():
         else:
             action_to_choose = random.choice(possible_actions)
             self.random_actions += 1
-
+        
+        #print("old_pos: ", self.survivor.get_body_pos(), self.survivor.get_vision_pos())
+        #print("Action chosen: ", Actions(action_to_choose))
+        self.survivor.do_action(action_to_choose)
+        
         new_state = self.get_state(self.survivor.get_body_pos(), self.survivor.get_vision_pos())
-        #print("new_pos: ", survivor.get_body_pos(), survivor.get_vision_pos())
+        #print("new_pos: ", self.survivor.get_body_pos(), self.survivor.get_vision_pos())
         #print("new_state: ", States(new_state[0]), States(new_state[1]))
 
         highest_Q_value = self.get_max_value_from_state(new_state)
@@ -126,6 +130,7 @@ class Covid19Environment():
 class GraphicCovid19Environment():
     reward = 0
     have_been_to_kiwi = False
+    done = False
 
     def __init__(self, q_table_choice = False, q_table = None):
         try:
@@ -155,7 +160,7 @@ class GraphicCovid19Environment():
                 self.win.close()
         
     def listen_for_keys(self):
-        while True:
+        while not self.done:
             k = self.win.checkKey()
 
             if k == 'Left':
@@ -171,6 +176,7 @@ class GraphicCovid19Environment():
                     self.do_action()
             elif k == 'period':
                 break
+        print("Total reward: ", self.reward)
     
     def do_action_from_q_table(self):
         current_state = self.get_state(self.survivor.get_body_pos(), self.survivor.get_vision_pos())
@@ -202,27 +208,22 @@ class GraphicCovid19Environment():
         print("FinishedPlotting")
     
     def add_house(self):
-        print("add_house")
-        
         self.housePos = [0, 0]
         house = Rectangle(Point(0,0), Point(1,1))
         house.draw(self.win)
         house.setFill("brown")
-        print("add_house")
+        print("House added")
     
     def add_survivor(self):
-        print("add_survivor")
         self.survivor = GraphicMovableObj(self.win)
-        print("add_survivor")
+        print("Survivor added")
         
     def add_kiwi(self):
-        print("add_kiwi")
-        
         self.kiwiPos = [9, 9]
         kiwi = Rectangle(Point(9,9), Point(10, 10))
         kiwi.draw(self.win)
         kiwi.setFill("green")
-        print("add_kiwi")
+        print("Kiwi added")
     
     def reset_environment(self):
         self.survivor.restart()
@@ -239,7 +240,9 @@ class GraphicCovid19Environment():
             self.survivor.move_forward()
         else:
             print("Something is wrong when doing an action: ", num)
-        self.calculate_rewards(self.get_state(self.survivor.get_body_pos(), self.survivor.get_vision_pos()))
+        new_reward, done = self.calculate_rewards(self.get_state(self.survivor.get_body_pos(), self.survivor.get_vision_pos()))
+        self.reward += new_reward
+        self.done = done
     
     def calculate_rewards(self, state):
         print(States(state[0]), States(state[1]))

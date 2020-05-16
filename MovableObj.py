@@ -27,15 +27,22 @@ class MovableObj():
             self.look_left(action_num)
             
     def move_forward(self):
+        #print("Old pos: ", self.get_body_pos(), self.get_vision_pos())
         direction = self.states[self.currentState]
-        self.current_pos = (self.current_pos[0] + direction[0], self.current_pos[1] + direction[1]) 
+        self.current_pos = (self.current_pos[0] + direction[0], self.current_pos[1] + direction[1])
+        #print("After moving forward pos: ", self.get_body_pos(), self.get_vision_pos())
     
     def restart(self):
         self.currentState = 0
 
     def look_left(self, left = 0):
+        #print(self.currentState, "Old pos: ", self.get_body_pos(), self.get_vision_pos())
+        
         nextState = self.directions[self.currentState][left]
         self.currentState = nextState
+        
+        #print(self.currentState, "After looking left/right ", left, " pos: ", self.get_body_pos(), self.get_vision_pos())
+        
 
 class GraphicMovableObj():
     up = [0, 1]
